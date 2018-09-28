@@ -2,9 +2,9 @@
 
 namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.Write("Enter Azure Service Bus connection string: ");
             var connectionString = Console.ReadLine();

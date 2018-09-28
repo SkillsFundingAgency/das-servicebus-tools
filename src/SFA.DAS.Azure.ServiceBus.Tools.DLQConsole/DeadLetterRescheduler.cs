@@ -21,6 +21,7 @@ namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole
 
                 if (message == null)
                 {
+                    Console.WriteLine("No more messages to process.");
                     hasMessages = false;
                     continue;
                 }
@@ -34,6 +35,7 @@ namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole
                 Console.WriteLine($"Moving message with ID: {message.MessageId} Completed.");
             }
 
+            Console.WriteLine("Closing Dead Letter Queue Client.");
             await dlqClient.CloseAsync();
         }
 
