@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Azure.ServiceBus.Tools.DLQConsole", "SFA.DAS.Azure.ServiceBus.Tools.DLQConsole\SFA.DAS.Azure.ServiceBus.Tools.DLQConsole.csproj", "{001E04A9-880D-45A1-A076-2A7F77183BA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.NServiceBus.Tools.MessagePublisher", "SFA.DAS.NServiceBus.Tools.MessagePublisher\SFA.DAS.NServiceBus.Tools.MessagePublisher.csproj", "{FA2857E9-ED9C-4D21-9AEE-945F7E58ABAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{001E04A9-880D-45A1-A076-2A7F77183BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{001E04A9-880D-45A1-A076-2A7F77183BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{001E04A9-880D-45A1-A076-2A7F77183BA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA2857E9-ED9C-4D21-9AEE-945F7E58ABAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA2857E9-ED9C-4D21-9AEE-945F7E58ABAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA2857E9-ED9C-4D21-9AEE-945F7E58ABAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA2857E9-ED9C-4D21-9AEE-945F7E58ABAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
