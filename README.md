@@ -27,4 +27,35 @@ Once you have entered all the above information when prompted the application wi
 Currently the dead letter requeue app has no error handling and this will follow once clearer requirements are worked out. 
 
 
+## RUnning the NServiceBus message publisher app
 
+The NServiceBus message publisher is a simple command line tool to create and add a message onto a NServiceBus message queue. The command line tool is designed to work with command line parameters rather than being console based. The command based tool parameters work using the following format:
+
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe ** [Verb] [Options]** 
+
+You can view any help information at any time by using the * help * verb
+
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe help
+
+You can get help on a specific command by using the * --help * option for that command
+
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe [Verb] --help
+
+
+Below explains how to add messages to a queue of a given type.
+
+### Adding a import payments message [importpayments verb]
+To add a message to a NServiceBus queue which kicks off payment importing for a specific account and period end you need to use the 'importpayments' verb with the following options:
+
+- [-a, --account] Account ID (Number) (i.e. 12)
+- [-p, --period] Period end (i.e. 1718-R01)
+- [-e, --environment] The Environment that the NServiceBus is located in (i.e. LOCAL, TEST, PREPROD)
+- [-n, --endpoint] The NServiceBus endpoint the message will be published to
+- [-c, --connection] The connection string for the target NServiceBus instance
+- [-l, --license] The license string that contains the NServiceBus license.
+
+Below is an example of usage:
+
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe importpayments -a 21 -p 1718-R01 -e TEST -n "SFA.DAS.TEST.MESSAGE" -c [connection string] -l [license text]
+  
+You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information show in cyan.
