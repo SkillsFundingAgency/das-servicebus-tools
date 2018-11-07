@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace SFA.DAS.NServiceBus.Tools.MessagePublisher
+namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Extensions
 {
     public static class StringExtensions
     {

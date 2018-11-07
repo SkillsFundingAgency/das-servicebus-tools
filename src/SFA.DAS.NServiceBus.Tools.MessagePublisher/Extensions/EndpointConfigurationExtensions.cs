@@ -2,7 +2,7 @@
 using NServiceBus;
 using SFA.DAS.NServiceBus.AzureServiceBus;
 
-namespace SFA.DAS.NServiceBus.Tools.MessagePublisher
+namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Extensions
 {
     public static class EndpointConfigurationExtensions
     {

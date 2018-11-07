@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.NServiceBus.Tools.MessagePublisher.Extensions;
 using SFA.DAS.NServiceBus.Tools.MessagePublisher.Verbs;
 using IContainer = StructureMap.IContainer;
 
@@ -46,7 +48,7 @@ namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Actions
                 {
                     AccountId = accountId,
                     PeriodEndRef = periodEnd
-                });
+                }).GetAwaiter().GetResult();
 
                 WriteToConsole("Message sent successfully", ConsoleColours.Success);
             }
