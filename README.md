@@ -59,3 +59,20 @@ Below is an example of usage:
 > SFA.DAS.NServiceBus.Tools.MessagePublisher.exe importpayments -a 21 -p 1718-R01 -e TEST -n "SFA.DAS.TEST.MESSAGE" -c [connection string] -l [license text]
   
 You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information show in cyan.
+
+### Adding a import levy declaration message [importdeclarations verb]
+To add a message to a NServiceBus queue which kicks off levy declarations importing for a specific account and PAYE scheme you need to use the 'importdeclarations' verb with the following options:
+
+- [-a, --account] Account ID (Number) (i.e. 12)
+- [-p, --payeref] PAYE Scheme (i.e. AAA/00100AA)
+- [-e, --environment] The Environment that the NServiceBus is located in (i.e. LOCAL, TEST, PREPROD)
+- [-n, --endpoint] The NServiceBus endpoint the message will be published to
+- [-c, --connection] The connection string for the target NServiceBus instance
+- [-l, --license] The license string that contains the NServiceBus license.
+
+Below is an example of usage:
+
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe importdeclarations -a 21 -p AAA/00200AA -e TEST -n "SFA.DAS.TEST.MESSAGE" -c [connection string] -l [license text]
+  
+You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information show in cyan.
+
