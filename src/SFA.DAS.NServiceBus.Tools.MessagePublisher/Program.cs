@@ -11,8 +11,9 @@ namespace SFA.DAS.NServiceBus.Tools.MessagePublisher
        {
            var container = IoC.Initialize();
 
-           Parser.Default.ParseArguments(args, typeof(ImportAccountPaymentsVerb))
-               .WithParsed<ImportAccountPaymentsVerb>(verb => ImportPaymentsAction.Execute(verb, container));
+           Parser.Default.ParseArguments(args, typeof(ImportAccountPaymentsVerb), typeof(ImportAccountLevyDeclarationsVerb))
+               .WithParsed<ImportAccountPaymentsVerb>(verb => ImportPaymentsAction.Execute(verb, container))
+               .WithParsed<ImportAccountLevyDeclarationsVerb>(verb => ImportAccountLevyDeclarationsAction.Execute(verb, container));
        }
     }
 }
