@@ -57,7 +57,7 @@ To add a message to a NServiceBus queue which kicks off payment importing for a 
 
 Below is an example of usage:
 
-> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe importpayments -a 21 -p 1718-R01 -e TEST -n "SFA.DAS.TEST.MESSAGE" -c [connection string] -l [license text]
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe importpayments -a 21 -p 1718-R01 -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
   
 You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
 
@@ -74,7 +74,7 @@ To add a message to a NServiceBus queue which kicks off levy declarations import
 
 Below is an example of usage:
 
-> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe importdeclarations -a 21 -p AAA/00200AA -e TEST -n "SFA.DAS.TEST.MESSAGE" -c [connection string] -l [license text]
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe importdeclarations -a 21 -p AAA/00200AA -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
   
 You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
 
@@ -89,7 +89,7 @@ To add a message to a NServiceBus queue which kicks off expiring funds for all a
 
 Below is an example of usage:
 
-> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe expirefunds -a 21 -e TEST -n "SFA.DAS.TEST.MESSAGE" -c [connection string] -l [license text]
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe expirefunds -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
   
 You can use the short (-e) or long (--environment) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
 
@@ -105,6 +105,6 @@ To add a message to a NServiceBus queue which kicks off expiring funds for a spe
 
 Below is an example of usage:
 
-> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe expireaccountfunds -a 21 -e TEST -n "SFA.DAS.TEST.MESSAGE" -c [connection string] -l [license text]
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe expireaccountfunds -a 21 -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
   
 You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
