@@ -18,7 +18,7 @@ namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Actions
         {
             WriteToConsole("Connecting to NServiceBus endpoint:", ConsoleColours.Debug);
 
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.NServiceBus.MessagePublisher")//verb.EndpointName)
+            var endpointConfiguration = new EndpointConfiguration(verb.EndpointName)
                 .UseAzureServiceBusTransport<DraftExpireAccountFundsCommand>(verb.ServiceBusConnectionString, verb.IsDevelopmentEnvironment, verb.EndpointName)
                 .UseLicense(verb.License.HtmlDecode())
                 .UseNewtonsoftJsonSerializer()
@@ -36,17 +36,18 @@ namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Actions
             WriteToConsole($"License: {verb.License}", ConsoleColours.Debug);
             WriteToConsole($"Is Development: {verb.IsDevelopmentEnvironment}", ConsoleColours.Debug);
 
-            SendExpireAccountFundsCommand(endpoint, verb.AccountId);
+            SendDraftExpireAccountFundsCommand(endpoint, verb.AccountId, new DateTime(verb.Year, verb.Month, 1)); 
         }
-        private static void SendExpireAccountFundsCommand(IMessageSession endpoint, long accountId)
+        private static void SendDraftExpireAccountFundsCommand(IMessageSession endpoint, long accountId, DateTime dateTo)
         {
             try
             {
                 WriteToConsole($"Sending Message account id: {accountId}", ConsoleColours.Debug);
                 
-                endpoint.Send(new ExpireAccountFundsCommand
+                endpoint.Send(new DraftExpireAccountFundsCommand
                 {
-                    AccountId = accountId
+                    AccountId = accountId,
+                    DateTo = dateTo
                 }).GetAwaiter().GetResult();
 
                 WriteToConsole("Message sent successfully", ConsoleColours.Success);

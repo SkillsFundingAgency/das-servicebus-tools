@@ -34,15 +34,18 @@ namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Actions
             WriteToConsole($"License: {verb.License}", ConsoleColours.Debug);
             WriteToConsole($"Is Development: {verb.IsDevelopmentEnvironment}", ConsoleColours.Debug);
 
-            SendExpireFundsCommand(endpoint);
+            SendDraftExpireFundsCommand(endpoint, new DateTime(verb.Year, verb.Month, 1));
         }
-        private static void SendExpireFundsCommand(IMessageSession endpoint)
+        private static void SendDraftExpireFundsCommand(IMessageSession endpoint, DateTime dateTo)
         {
             try
             {
                 WriteToConsole($"Sending Message", ConsoleColours.Debug);
                 
-                endpoint.Send(new ExpireFundsCommand()).GetAwaiter().GetResult();
+                endpoint.Send(new DraftExpireFundsCommand
+                {
+                    DateTo = dateTo
+                }).GetAwaiter().GetResult();
 
                 WriteToConsole("Message sent successfully", ConsoleColours.Success);
             }
