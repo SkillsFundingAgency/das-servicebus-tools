@@ -1,9 +1,10 @@
 ﻿using System;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Messages.Commands;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.Configuration.NLog;
+using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.NServiceBus.Tools.MessagePublisher.Extensions;
 using SFA.DAS.NServiceBus.Tools.MessagePublisher.Verbs;
 using StructureMap;
@@ -17,7 +18,7 @@ namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Actions
             WriteToConsole("Connecting to NServiceBus endpoint:", ConsoleColours.Debug);
 
             var endpointConfiguration = new EndpointConfiguration(verb.EndpointName)
-                .UseAzureServiceBusTransport<ImportAccountLevyDeclarationsCommand>(() => verb.ServiceBusConnectionString, verb.IsDevelopmentEnvironment, verb.EndpointName)
+                .UseAzureServiceBusTransport<ImportAccountLevyDeclarationsCommand>(verb.ServiceBusConnectionString, verb.IsDevelopmentEnvironment, verb.EndpointName)
                 .UseLicense(verb.License.HtmlDecode())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
@@ -43,11 +44,7 @@ namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Actions
             {
                 WriteToConsole($"Sending Message account id: {accountId}, PAYE Scheme: {payeRef}", ConsoleColours.Debug);
 
-                endpoint.Send(new ImportAccountLevyDeclarationsCommand
-                {
-                    AccountId = accountId,
-                     PayeRef = payeRef
-                }).GetAwaiter().GetResult();
+                endpoint.Send(new ImportAccountLevyDeclarationsCommand(accountId, payeRef)).GetAwaiter().GetResult();
 
                 WriteToConsole("Message sent successfully", ConsoleColours.Success);
             }

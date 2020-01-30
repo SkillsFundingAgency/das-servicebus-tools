@@ -1,9 +1,10 @@
 ﻿using System;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Messages.Commands;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.Configuration.NLog;
+using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.NServiceBus.Tools.MessagePublisher.Extensions;
 using SFA.DAS.NServiceBus.Tools.MessagePublisher.Verbs;
 using StructureMap;
@@ -17,7 +18,7 @@ namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Actions
             WriteToConsole("Connecting to NServiceBus endpoint:", ConsoleColours.Debug);
 
             var endpointConfiguration = new EndpointConfiguration(verb.EndpointName)
-                .UseAzureServiceBusTransport<ExpireFundsCommand>(() => verb.ServiceBusConnectionString, verb.IsDevelopmentEnvironment, verb.EndpointName)
+                .UseAzureServiceBusTransport<ExpireFundsCommand>(verb.ServiceBusConnectionString, verb.IsDevelopmentEnvironment, verb.EndpointName)
                 .UseLicense(verb.License.HtmlDecode())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
