@@ -36,7 +36,7 @@ namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Actions
             WriteToConsole($"License: {verb.License}", ConsoleColours.Debug);
             WriteToConsole($"Is Development: {verb.IsDevelopmentEnvironment}", ConsoleColours.Debug);
 
-            SendDraftExpireAccountFundsCommand(endpoint, verb.AccountId, new DateTime(verb.Year, verb.Month, 1)); 
+            SendDraftExpireAccountFundsCommand(endpoint, verb.AccountId, new DateTime(verb.Year, verb.Month, 28)); 
         }
         private static void SendDraftExpireAccountFundsCommand(IMessageSession endpoint, long accountId, DateTime dateTo)
         {
