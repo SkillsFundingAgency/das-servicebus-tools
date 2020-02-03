@@ -7,18 +7,18 @@ using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.NServiceBus.Tools.MessagePublisher.Extensions;
 using SFA.DAS.NServiceBus.Tools.MessagePublisher.Verbs;
-using IContainer = StructureMap.IContainer;
+using StructureMap;
 
 namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Actions
 {
-    public static class ImportPaymentsAction
+    public class DraftExpireFundsAction
     {
-        public static void Execute(ImportAccountPaymentsVerb verb, IContainer container)
+        public static void Execute(DraftExpireFundsVerb verb, IContainer container)
         {
             WriteToConsole("Connecting to NServiceBus endpoint:", ConsoleColours.Debug);
 
             var endpointConfiguration = new EndpointConfiguration(verb.EndpointName)
-                .UseAzureServiceBusTransport<ImportAccountPaymentsCommand>(verb.ServiceBusConnectionString, verb.IsDevelopmentEnvironment, verb.EndpointName)
+                .UseAzureServiceBusTransport<DraftExpireFundsCommand>(verb.ServiceBusConnectionString, verb.IsDevelopmentEnvironment, verb.EndpointName)
                 .UseLicense(verb.License.HtmlDecode())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
@@ -28,26 +28,23 @@ namespace SFA.DAS.NServiceBus.Tools.MessagePublisher.Actions
             var endpoint = Endpoint.Start(endpointConfiguration).Result;
 
             WriteToConsole("Debug information below:", ConsoleColours.Debug);
-            WriteToConsole($"Account ID: {verb.AccountId}", ConsoleColours.Debug);
-            WriteToConsole($"Period End: {verb.PeriodEnd}", ConsoleColours.Debug);
             WriteToConsole($"Environment: {verb.Environment}", ConsoleColours.Debug);
-            WriteToConsole($"Endpoint: {verb.EndpointName}",ConsoleColours.Debug);
+            WriteToConsole($"Endpoint: {verb.EndpointName}", ConsoleColours.Debug);
             WriteToConsole($"Service Bus Connection: {verb.ServiceBusConnectionString}", ConsoleColours.Debug);
             WriteToConsole($"License: {verb.License}", ConsoleColours.Debug);
             WriteToConsole($"Is Development: {verb.IsDevelopmentEnvironment}", ConsoleColours.Debug);
 
-            SendImportAccountPaymentsCommand(endpoint, verb.AccountId, verb.PeriodEnd);
+            SendDraftExpireFundsCommand(endpoint, new DateTime(verb.Year, verb.Month, 1));
         }
-        private static void SendImportAccountPaymentsCommand(IMessageSession endpoint, long accountId, string periodEnd)
+        private static void SendDraftExpireFundsCommand(IMessageSession endpoint, DateTime dateTo)
         {
             try
             {
-                WriteToConsole($"Sending Message account id: {accountId}, period end: {periodEnd}", ConsoleColours.Debug);
-
-                endpoint.Send(new ImportAccountPaymentsCommand
+                WriteToConsole($"Sending Message", ConsoleColours.Debug);
+                
+                endpoint.Send(new DraftExpireFundsCommand
                 {
-                    AccountId = accountId,  
-                    PeriodEndRef = periodEnd
+                    DateTo = dateTo
                 }).GetAwaiter().GetResult();
 
                 WriteToConsole("Message sent successfully", ConsoleColours.Success);
