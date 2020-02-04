@@ -108,3 +108,34 @@ Below is an example of usage:
 > SFA.DAS.NServiceBus.Tools.MessagePublisher.exe expireaccountfunds -a 21 -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
   
 You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
+
+### Adding an draft expire funds message [draftexpirefunds verb]
+
+To add a message to a NServiceBus queue which kicks off expiring funds for a specific account you need to use the 'draftexpireaccountfunds' verb with the following options:
+
+- [-e, --environment] The Environment that the NServiceBus is located in (i.e. LOCAL, TEST, PREPROD)
+- [-n, --endpoint] The NServiceBus endpoint the message will be published to
+- [-c, --connection] The connection string for the target NServiceBus instance
+- [-l, --license] The license string that contains the NServiceBus license.
+
+Below is an example of usage:
+
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe draftexpirefunds -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
+  
+You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
+
+### Adding an draft expire account funds message [draftexpireaccountfunds verb]
+
+To add a message to a NServiceBus queue which kicks off expiring funds for a specific account you need to use the 'draftexpireaccountfunds' verb with the following options:
+
+- [-a, --account] Account ID (Number) (i.e. 12)
+- [-e, --environment] The Environment that the NServiceBus is located in (i.e. LOCAL, TEST, PREPROD)
+- [-n, --endpoint] The NServiceBus endpoint the message will be published to
+- [-c, --connection] The connection string for the target NServiceBus instance
+- [-l, --license] The license string that contains the NServiceBus license.
+
+Below is an example of usage:
+
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe draftexpireaccountfunds -a 21 -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
+  
+You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
