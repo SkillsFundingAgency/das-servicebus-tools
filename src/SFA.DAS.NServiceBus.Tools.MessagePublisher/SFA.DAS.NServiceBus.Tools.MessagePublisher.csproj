@@ -206,6 +206,7 @@
     <Compile Include="Actions\ExpireFundsAction.cs" />
     <Compile Include="Actions\ExpireAccountFundsAction.cs" />
     <Compile Include="Actions\ImportAccountLevyDeclarationsAction.cs" />
+    <Compile Include="Actions\ProcessPeriodEndPaymentsAction.cs" />
     <Compile Include="Actions\ImportPaymentsAction.cs" />
     <Compile Include="ConsoleColours.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="Verbs\ExpireFundsVerb.cs" />
     <Compile Include="Verbs\ExpireAccountFundsVerb.cs" />
     <Compile Include="Verbs\ImportAccountLevyDeclarationsVerb.cs" />
+    <Compile Include="Verbs\ProcessPeriodEndPaymentsVerb.cs" />
     <Compile Include="Verbs\ImportAccountPaymentsVerb.cs" />
     <Compile Include="Verbs\NServiceBusVerbBase.cs" />
   </ItemGroup>
