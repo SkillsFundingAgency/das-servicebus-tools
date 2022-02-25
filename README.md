@@ -27,7 +27,7 @@ Once you have entered all the above information when prompted the application wi
 Currently the dead letter requeue app has no error handling and this will follow once clearer requirements are worked out. 
 
 
-## RUnning the NServiceBus message publisher app
+## Running the NServiceBus message publisher app
 
 The NServiceBus message publisher is a simple command line tool to create and add a message onto a NServiceBus message queue. The command line tool is designed to work with command line parameters rather than being console based. The command based tool parameters work using the following format:
 
@@ -44,6 +44,23 @@ You can get help on a specific command by using the * --help * option for that c
 
 Below explains how to add messages to a queue of a given type.
 
+__NOTE:__ You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
+
+
+### Adding an Process period end payments message [processperiodendpayments verb]
+
+To add a message to a NServiceBus queue which kicks off payment importing for all accounts for a specified period end you need to use the 'processperiodendpayments' verb with the following options:
+
+- [-p, --period] Period end (i.e. 1718-R01)
+- [-e, --environment] The Environment that the NServiceBus is located in (i.e. LOCAL, TEST, PREPROD)
+- [-n, --endpoint] The NServiceBus endpoint the message will be published to
+- [-c, --connection] The connection string for the target NServiceBus instance
+- [-l, --license] The license string that contains the NServiceBus license.
+
+Below is an example of usage:
+
+> SFA.DAS.NServiceBus.Tools.MessagePublisher.exe processperiodendpayments -p 1718-R01 -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
+
 ### Adding an import payments message [importpayments verb]
 
 To add a message to a NServiceBus queue which kicks off payment importing for a specific account and period end you need to use the 'importpayments' verb with the following options:
@@ -59,7 +76,6 @@ Below is an example of usage:
 
 > SFA.DAS.NServiceBus.Tools.MessagePublisher.exe importpayments -a 21 -p 1718-R01 -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
   
-You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
 
 ### Adding an import levy declaration message [importdeclarations verb]
 
@@ -75,8 +91,7 @@ To add a message to a NServiceBus queue which kicks off levy declarations import
 Below is an example of usage:
 
 > SFA.DAS.NServiceBus.Tools.MessagePublisher.exe importdeclarations -a 21 -p AAA/00200AA -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
-  
-You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
+
 
 ### Adding an expire funds message [expirefunds verb]
 
@@ -91,7 +106,6 @@ Below is an example of usage:
 
 > SFA.DAS.NServiceBus.Tools.MessagePublisher.exe expirefunds -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
   
-You can use the short (-e) or long (--environment) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
 
 ### Adding an expire account funds message [expireaccountfunds verb]
 
@@ -107,7 +121,6 @@ Below is an example of usage:
 
 > SFA.DAS.NServiceBus.Tools.MessagePublisher.exe expireaccountfunds -a 21 -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
   
-You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
 
 ### Adding an draft expire funds message [draftexpirefunds verb]
 
@@ -121,8 +134,7 @@ To add a message to a NServiceBus queue which kicks off expiring funds for a spe
 Below is an example of usage:
 
 > SFA.DAS.NServiceBus.Tools.MessagePublisher.exe draftexpirefunds -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
-  
-You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
+
 
 ### Adding an draft expire account funds message [draftexpireaccountfunds verb]
 
@@ -137,5 +149,3 @@ To add a message to a NServiceBus queue which kicks off expiring funds for a spe
 Below is an example of usage:
 
 > SFA.DAS.NServiceBus.Tools.MessagePublisher.exe draftexpireaccountfunds -a 21 -e TEST -n "SFA.DAS.EmployerFinance.MessageHandlers" -c [connection string] -l [license text]
-  
-You can use the short (-a) or long (--account) option tags to define parameters being sent to the application. You shoud then see output of the result of your request. Errors should show in red and success messages in green. There is also debug information shown in cyan.
