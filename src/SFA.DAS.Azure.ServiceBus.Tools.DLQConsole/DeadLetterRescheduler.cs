@@ -1,52 +1,50 @@
-﻿using Microsoft.ServiceBus;
-using Microsoft.ServiceBus.Messaging;
-using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using Azure.Identity;
+using Azure.Messaging.ServiceBus;
 
-namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole
+namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole;
+
+public static class DeadLetterRescheduler
 {
-    public static class DeadLetterRescheduler
+    public static async Task RequeueMessages(string connectionString, string topicName, string subscriptionName)
     {
-        public static async Task RequeueMessages(string connectionString, string topicName, string subscriptionName)
-        {
-            var dlqClient = CreateDeadLetterQueueClient(connectionString, topicName, subscriptionName);
-            var topicClient = TopicClient.CreateFromConnectionString(connectionString, topicName);
+        await using var client = new ServiceBusClient(connectionString, new DefaultAzureCredential());
 
-            var hasMessages = true;
+        await using var sender = client.CreateSender(topicName);
 
-            while (hasMessages)
-            {
-                var message = await dlqClient.ReceiveAsync(TimeSpan.FromSeconds(2));
+        await PickUpAndFixDeadletters(client, topicName, subscriptionName, sender);
+    }
 
-                if (message == null)
-                {
-                    Console.WriteLine("No more messages to process.");
-                    hasMessages = false;
-                    continue;
-                }
+    private static async Task PickUpAndFixDeadletters(ServiceBusClient client, string topicName, string subscriptionName, ServiceBusSender resubmitSender)
+    {
+        await using var dlqProcessor = client.CreateProcessor(
+            topicName: topicName,
+            subscriptionName: subscriptionName,
+            new ServiceBusProcessorOptions { SubQueue = SubQueue.DeadLetter }
+        );
 
-                Console.WriteLine($"Moving message with ID: {message.MessageId}.");
+        dlqProcessor.ProcessMessageAsync += async args => { await ProcessMessage(resubmitSender, args); };
 
-                await topicClient.SendAsync(new BrokeredMessage(message.GetBody<Stream>()));
+        dlqProcessor.ProcessErrorAsync += LogMessageHandlerException;
 
-                await message.CompleteAsync();
+        _ = dlqProcessor.StartProcessingAsync();
+    }
 
-                Console.WriteLine($"Moving message with ID: {message.MessageId} Completed.");
-            }
+    private static async Task ProcessMessage(ServiceBusSender resubmitSender, ProcessMessageEventArgs args)
+    {
+        var resubmitMessage = new ServiceBusMessage(args.Message);
 
-            Console.WriteLine("Closing Dead Letter Queue Client.");
-            await dlqClient.CloseAsync();
-        }
+        Console.WriteLine($"Moving message with ID: {resubmitMessage.MessageId}.");
 
+        await resubmitSender.SendMessageAsync(resubmitMessage);
 
-        private static MessageReceiver CreateDeadLetterQueueClient(string connectionString, string topicName, string subscriptionName)
-        {
-            var builder = new ServiceBusConnectionStringBuilder(connectionString);
-            var factory = MessagingFactory.CreateFromConnectionString(builder.ToString());
-            var deadLetterQueuePath = SubscriptionClient.FormatDeadLetterPath(topicName, subscriptionName);
+        await args.CompleteMessageAsync(args.Message);
 
-            return factory.CreateMessageReceiver(deadLetterQueuePath);
-        }
+        Console.WriteLine($"Moving message with ID: {resubmitMessage.MessageId} completed.");
+    }
+
+    private static Task LogMessageHandlerException(ProcessErrorEventArgs e)
+    {
+        Console.WriteLine($"Exception: \"{e.Exception.Message}\" {e.EntityPath}");
+        return Task.CompletedTask;
     }
 }
