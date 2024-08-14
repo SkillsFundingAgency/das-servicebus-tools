@@ -9,8 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Azure.Identity" Version="1.12.0" />
       <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.1" />
+      <PackageReference Include="CommandLineParser" Version="2.9.1" />
+      <PackageReference Include="NServiceBus" Version="7.0.1" />
+      <PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.3195" />
+      <PackageReference Include="SFA.DAS.NServiceBus" Version="16.0.21" />
     </ItemGroup>
 
 </Project>

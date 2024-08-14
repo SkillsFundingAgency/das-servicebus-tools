@@ -1,21 +1,38 @@
 ﻿using SFA.DAS.Azure.ServiceBus.Tools.DLQConsole;
 
-Console.Write("Enter Azure Service Bus connection string: ");
-var connectionString = Console.ReadLine();
+public class Program
+{
+    public static async Task Main(string[] args)
+    {
+        var connectionString = GetInput("Enter Azure Service Bus connection string: ");
+        var topicName = GetInput("Enter Azure Topic name: ");
+        var subscriptionName = GetInput("Enter Azure Topic Subscription name: ");
 
-Console.Write("Enter Azure Topic name: ");
-var topicName = Console.ReadLine();
+        var scheduler = new DeadLetterRescheduler(
+            connectionString,
+            topicName,
+            subscriptionName
+        );
 
-Console.Write("Enter Azure Topic Subscription name: ");
-var subscriptionName = Console.ReadLine();
+        await scheduler.RequeueMessages();
+    }
 
-Console.WriteLine("Moving messages from dead letter queue to topic queue. Please wait...");
+    private static string GetInput(string message)
+    {
+        string? input;
 
-await DeadLetterRescheduler.RequeueMessages(
-    connectionString,
-    topicName,
-    subscriptionName
-);
+        do
+        {
+            Console.WriteLine(message);
+            input = Console.ReadLine();
 
-Console.WriteLine("All dead letter messages have been requeued.");
+            if (string.IsNullOrEmpty(input))
+            {
+                Console.WriteLine("Input cannot be null");
+            }
+            
+        } while (string.IsNullOrWhiteSpace(input));
 
+        return input;
+    }
+}
