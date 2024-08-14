@@ -53,11 +53,8 @@ public class DeadLetterRescheduler
         _deadLetterProcessor.ProcessMessageAsync += async args =>
         {
             var resubmitMessage = new ServiceBusMessage(args.Message);
-
             await resubmitSender.SendMessageAsync(resubmitMessage);
-
             await args.CompleteMessageAsync(args.Message);
-
             messageCount++;
         };
 
@@ -75,7 +72,7 @@ public class DeadLetterRescheduler
         Console.WriteLine("Wait for a minute and then press any key to end the processing");
         Console.ReadKey();
 
-        Console.WriteLine($"Processed {messageCount} dead-letter messages.");
+        Console.WriteLine($"Successfully processed {messageCount} dead-letter messages.");
         Console.WriteLine("Stopping the receiver...");
 
         await _deadLetterProcessor.StopProcessingAsync();
