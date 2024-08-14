@@ -1,4 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
+using static SFA.DAS.Azure.ServiceBus.Tools.DLQConsole.Extensions.ConsoleExtensions;
 
 namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole;
 
@@ -36,7 +37,7 @@ public class DeadLetterRescheduler
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            WriteError(e.ToString());
             throw;
         }
         finally
@@ -60,8 +61,8 @@ public class DeadLetterRescheduler
 
         _deadLetterProcessor.ProcessErrorAsync += args =>
         {
-            Console.Error.WriteLine($"Exception: {args.Exception.Message} {args.EntityPath}");
-            Console.Error.WriteLine(args.Exception.ToString());
+            WriteError($"Exception: {args.Exception.Message} {args.EntityPath}");
+            WriteError(args.Exception.ToString());
 
             return Task.CompletedTask;
         };

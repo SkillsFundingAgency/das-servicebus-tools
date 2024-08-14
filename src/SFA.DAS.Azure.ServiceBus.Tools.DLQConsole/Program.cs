@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole;
+﻿using static SFA.DAS.Azure.ServiceBus.Tools.DLQConsole.Extensions.ConsoleExtensions;
+
+namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole;
 
 public class Program
 {
@@ -18,24 +20,5 @@ public class Program
         );
 
         await scheduler.RequeueMessages();
-    }
-
-    private static string GetInput(string message)
-    {
-        string? input;
-
-        do
-        {
-            Console.WriteLine(message);
-            input = Console.ReadLine();
-
-            if (string.IsNullOrEmpty(input))
-            {
-                Console.WriteLine("Input cannot be null");
-            }
-            
-        } while (string.IsNullOrWhiteSpace(input));
-
-        return input;
     }
 }
