@@ -1,3 +1,4 @@
+using System.IO;
 using Microsoft.Extensions.Configuration;
 
 namespace SFA.DAS.NServiceBus.Tools.Functions.Extensions;

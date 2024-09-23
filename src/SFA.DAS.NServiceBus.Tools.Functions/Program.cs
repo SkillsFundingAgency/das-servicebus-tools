@@ -1,14 +1,16 @@
+using System;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging.ApplicationInsights;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.NServiceBus.Tools.Functions.Extensions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
+using NServiceBus;
+using SFA.DAS.NServiceBus.Tools.Functions.Extensions;
 using SFA.DAS.NServiceBus.Tools.Functions.Services;
 
-//[assembly: NServiceBusTriggerFunction("SFA.DAS.NServiceBus.Tools.Functions")]
+[assembly: NServiceBusTriggerFunction("SFA.DAS.NServiceBus.Tools.Functions")]
 
 const string endpointName = nameof(SFA.DAS.NServiceBus.Tools.Functions);
 const string errorEndpointName = $"{endpointName}-error";
@@ -40,6 +42,7 @@ var host = new HostBuilder()
         // MI isn't currently supported by NSB in isolation process so NServiceBusConnectionString will need to be a SharedAccessKey in Azure.
         // When NSB SB triggers work with MI, AzureWebJobsServiceBus needs replacing with AzureWebJobsServiceBus:fullyQualifiedNamespace env variable in azure as per
         // https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/servicebus/Microsoft.Azure.WebJobs.Extensions.ServiceBus/README.md#managed-identity-authentication
+
         //Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", functionsConfig.NServiceBusConnectionString);
         //Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", functionsConfig.NServiceBusLicense);
 
@@ -49,13 +52,14 @@ var host = new HostBuilder()
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
     })
-    //.UseNServiceBus((config, endpointConfiguration) =>
-    //{
-    //    endpointConfiguration.AdvancedConfiguration.EnableInstallers();
-    //    endpointConfiguration.AdvancedConfiguration.SendFailedMessagesTo(errorEndpointName);
-    //    endpointConfiguration.Routing.AddRouting();
-    //    endpointConfiguration.AdvancedConfiguration.AssemblyScanner().ExcludeAssemblies("SFA.DAS.NServiceBus");
-    //})
+    //.UseNServiceBus(endpointName, serviceBusConnectionString, (_, endpointConfiguration) =>
+    .UseNServiceBus((_, endpointConfiguration) =>
+    {
+        endpointConfiguration.Routing.AddRouting();
+        endpointConfiguration.AdvancedConfiguration.EnableInstallers();
+        endpointConfiguration.AdvancedConfiguration.SendFailedMessagesTo(errorEndpointName);
+        endpointConfiguration.AdvancedConfiguration.AssemblyScanner().ExcludeAssemblies("SFA.DAS.NServiceBus");
+    })
     .Build();
 
 host.Run();
