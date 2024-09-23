@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Logging;
+using Microsoft.Azure.Functions.Worker.Http;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.Tools.Functions.Services;
 
@@ -10,17 +9,17 @@ namespace SFA.DAS.NServiceBus.Tools.Functions.Functions;
 public class ImportPaymentsFunction(IMessageProcessor messageProcessor)
 {
     [Function("ImportPayments")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", "ImportPayments")] HttpRequest req, ILogger log)
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", "ImportPayments")] HttpRequestData req, FunctionContext functionContext)
     {
         try
         {
-            await messageProcessor.SendCommand<ImportPaymentsCommand>(req.Body);
+            await messageProcessor.SendCommand<ImportPaymentsCommand>(req.Body, functionContext);
         }
         catch
         {
-            return new BadRequestObjectResult("ImportPayments failed.");
+            return req.CreateResponse(HttpStatusCode.BadRequest);
         }
 
-        return new OkObjectResult("ImportPayments completed successfully.");
+        return req.CreateResponse(HttpStatusCode.OK);
     }
 }

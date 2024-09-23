@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Logging;
+using Microsoft.Azure.Functions.Worker.Http;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.Tools.Functions.Services;
 
@@ -10,17 +9,17 @@ namespace SFA.DAS.NServiceBus.Tools.Functions.Functions;
 public class ExpireAccountFundsFunction(IMessageProcessor messageProcessor)
 {
     [Function("ExpireAccountFunds")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", "ExpireAccountFunds")] HttpRequest req, ILogger log)
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", "ExpireAccountFunds")] HttpRequestData req, FunctionContext functionContext)
     {
         try
         {
-            await messageProcessor.SendCommand<ExpireAccountFundsCommand>(req.Body);
+            await messageProcessor.SendCommand<ExpireAccountFundsCommand>(req.Body, functionContext);
         }
         catch
         {
-            return new BadRequestObjectResult("ExpireAccountFunds failed.");
+            return req.CreateResponse(HttpStatusCode.BadRequest);
         }
 
-        return new OkObjectResult("ExpireAccountFunds completed successfully.");
+        return req.CreateResponse(HttpStatusCode.OK);
     }
 }

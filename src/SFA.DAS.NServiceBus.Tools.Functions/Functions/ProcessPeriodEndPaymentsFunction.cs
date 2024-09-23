@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Logging;
+using Microsoft.Azure.Functions.Worker.Http;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.Tools.Functions.Services;
 
@@ -10,17 +9,17 @@ namespace SFA.DAS.NServiceBus.Tools.Functions.Functions;
 public class ProcessPeriodEndPaymentsFunction(IMessageProcessor messageProcessor)
 {
     [Function("ProcessPeriodEndPayments")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", "ProcessPeriodEndPayments")] HttpRequest req, ILogger log)
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", "ProcessPeriodEndPayments")] HttpRequestData req, FunctionContext functionContext)
     {
         try
         {
-            await messageProcessor.SendCommand<ProcessPeriodEndPaymentsCommand>(req.Body);
+            await messageProcessor.SendCommand<ProcessPeriodEndPaymentsCommand>(req.Body, functionContext);
         }
         catch
         {
-            return new BadRequestObjectResult("ProcessPeriodEndPayments failed.");
+            return req.CreateResponse(HttpStatusCode.BadRequest);
         }
 
-        return new OkObjectResult("ProcessPeriodEndPayments completed successfully.");
+        return req.CreateResponse(HttpStatusCode.OK);
     }
 }

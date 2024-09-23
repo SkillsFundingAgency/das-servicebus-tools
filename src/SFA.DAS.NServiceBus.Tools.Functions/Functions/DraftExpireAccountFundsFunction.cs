@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Logging;
+using Microsoft.Azure.Functions.Worker.Http;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.Tools.Functions.Services;
 
@@ -10,17 +9,17 @@ namespace SFA.DAS.NServiceBus.Tools.Functions.Functions;
 public class DraftExpireAccountFundsFunction(IMessageProcessor messageProcessor)
 {
     [Function("DraftExpireAccountFunds")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", "DraftExpireAccountFunds")] HttpRequest req, ILogger log)
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", "DraftExpireAccountFunds")] HttpRequestData req, FunctionContext functionContext)
     {
         try
         {
-            await messageProcessor.SendCommand<DraftExpireAccountFundsCommand>(req.Body);
+            await messageProcessor.SendCommand<DraftExpireAccountFundsCommand>(req.Body, functionContext);
         }
         catch
         {
-            return new BadRequestObjectResult("DraftExpireAccountFunds failed.");
+            return req.CreateResponse(HttpStatusCode.BadRequest);
         }
 
-        return new OkObjectResult("DraftExpireAccountFunds completed successfully.");
+        return req.CreateResponse(HttpStatusCode.OK);
     }
 }

@@ -1,24 +1,25 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace SFA.DAS.NServiceBus.Tools.Functions.Services;
 
 public interface IMessageProcessor
 {
-    Task SendCommand<T>() where T : class, ICommand;
-    Task SendCommand<T>(Stream requestContent) where T : class, ICommand;
+    Task SendCommand<T>(FunctionContext context) where T : class, ICommand;
+    Task SendCommand<T>(Stream requestContent, FunctionContext context) where T : class, ICommand;
 }
 
 public class StubMessageProcessor(ILogger<StubMessageProcessor> logger) : IMessageProcessor
 {
-    public Task SendCommand<T>() where T : class, ICommand
+    public Task SendCommand<T>(FunctionContext context) where T : class, ICommand
     {
         var typeName = typeof(T).ToString().Split('.').Last();
         logger.LogInformation("Sending Message '{TypeName)}'", typeName);
         return Task.CompletedTask;
     }
 
-    public async Task SendCommand<T>(Stream requestContent) where T : class, ICommand
+    public async Task SendCommand<T>(Stream requestContent, FunctionContext context) where T : class, ICommand
     {
         using var reader = new StreamReader(requestContent);
         var typeName = typeof(T).ToString().Split('.').Last();
@@ -27,9 +28,9 @@ public class StubMessageProcessor(ILogger<StubMessageProcessor> logger) : IMessa
     }
 }
 
-public class MessageProcessor(IMessageSession session, ILogger<MessageProcessor> logger) : IMessageProcessor
+public class MessageProcessor(IFunctionEndpoint endpoint, ILogger<MessageProcessor> logger) : IMessageProcessor
 {
-    public async Task SendCommand<T>(Stream requestContent) where T : class, ICommand
+    public async Task SendCommand<T>(Stream requestContent, FunctionContext context) where T : class, ICommand
     {
         using var reader = new StreamReader(requestContent);
         var content = await reader.ReadToEndAsync();
@@ -38,10 +39,10 @@ public class MessageProcessor(IMessageSession session, ILogger<MessageProcessor>
 
         logger.LogInformation("Sending Message '{TypeName)}' with payload: {Payload}", typeName, content);
 
-        await SendCommand(command, typeName);
+        await SendCommand(command, typeName, context);
     }
 
-    public async Task SendCommand<T>() where T : class, ICommand
+    public async Task SendCommand<T>(FunctionContext context) where T : class, ICommand
     {
         var typeName = typeof(T).ToString().Split('.').Last();
 
@@ -49,14 +50,14 @@ public class MessageProcessor(IMessageSession session, ILogger<MessageProcessor>
 
         var command = Activator.CreateInstance<T>();
 
-        await SendCommand(command, typeName);
+        await SendCommand(command, typeName, context);
     }
     
-    private async Task SendCommand<T>(T command, string typeName) where T : class, ICommand
+    private async Task SendCommand<T>(T command, string typeName, FunctionContext context) where T : class, ICommand
     {
         try
         {
-            await session.Send(command);
+            await endpoint.Send(command, context);
         }
         catch (Exception exception)
         {
