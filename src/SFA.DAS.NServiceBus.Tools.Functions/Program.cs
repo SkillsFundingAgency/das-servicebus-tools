@@ -58,7 +58,6 @@ var host = new HostBuilder()
         endpointConfiguration.Routing.AddRouting();
         endpointConfiguration.AdvancedConfiguration.EnableInstallers();
         endpointConfiguration.AdvancedConfiguration.SendFailedMessagesTo(errorEndpointName);
-        endpointConfiguration.AdvancedConfiguration.AssemblyScanner().ExcludeAssemblies("SFA.DAS.NServiceBus");
     })
     .Build();
 
