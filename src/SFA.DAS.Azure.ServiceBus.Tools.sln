@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Azure.ServiceBus.Tools.DLQConsole", "SFA.DAS.Azure.ServiceBus.Tools.DLQConsole\SFA.DAS.Azure.ServiceBus.Tools.DLQConsole.csproj", "{85EEC24C-4746-4A48-9F15-9B4DF22CE63A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Azure.ServiceBus.Tools.DLQConsole", "SFA.DAS.Azure.ServiceBus.Tools.DLQConsole\SFA.DAS.Azure.ServiceBus.Tools.DLQConsole.csproj", "{85EEC24C-4746-4A48-9F15-9B4DF22CE63A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.NServiceBus.Tools.MessagePublisher", "SFA.DAS.NServiceBus.Tools.MessagePublisher\SFA.DAS.NServiceBus.Tools.MessagePublisher.csproj", "{450D1C68-BDA5-48CA-824A-5991A2841395}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.NServiceBus.Tools.Functions", "SFA.DAS.NServiceBus.Tools.Functions\SFA.DAS.NServiceBus.Tools.Functions.csproj", "{6A1BF2C5-1D60-451E-8D8F-69ED5B70E36F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,17 +17,15 @@ Global
 		{85EEC24C-4746-4A48-9F15-9B4DF22CE63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85EEC24C-4746-4A48-9F15-9B4DF22CE63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85EEC24C-4746-4A48-9F15-9B4DF22CE63A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{450D1C68-BDA5-48CA-824A-5991A2841395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{450D1C68-BDA5-48CA-824A-5991A2841395}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{450D1C68-BDA5-48CA-824A-5991A2841395}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{450D1C68-BDA5-48CA-824A-5991A2841395}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A1BF2C5-1D60-451E-8D8F-69ED5B70E36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A1BF2C5-1D60-451E-8D8F-69ED5B70E36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A1BF2C5-1D60-451E-8D8F-69ED5B70E36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A1BF2C5-1D60-451E-8D8F-69ED5B70E36F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B04446BC-D188-4BB7-9C26-49FA027C31CB}
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal
