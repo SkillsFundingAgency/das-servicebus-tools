@@ -3,11 +3,11 @@ using System.Net;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
 
-namespace SFA.DAS.NServiceBus.Tools.Functions.Extensions;
+namespace SFA.DAS.ServiceBus.Tools.Functions.Extensions;
 
 public static class NServiceBusExtensions
 {
-    private const string EndpointName = nameof(SFA.DAS.NServiceBus.Tools.Functions);
+    private const string EndpointName = nameof(SFA.DAS.ServiceBus.Tools.Functions);
     private const string ErrorEndpointName = $"{EndpointName}-error";
 
     public static IHostBuilder ConfigureNServiceBus(this IHostBuilder hostBuilder)

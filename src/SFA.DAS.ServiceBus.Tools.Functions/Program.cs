@@ -6,15 +6,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using NServiceBus;
-using SFA.DAS.NServiceBus.Tools.Functions;
-using SFA.DAS.NServiceBus.Tools.Functions.Extensions;
-using SFA.DAS.NServiceBus.Tools.Functions.Services;
+using SFA.DAS.ServiceBus.Tools.Functions.Extensions;
+using SFA.DAS.ServiceBus.Tools.Functions.Services;
 
-[assembly: NServiceBusTriggerFunction("SFA.DAS.NServiceBus.Tools.Functions")]
+[assembly: NServiceBusTriggerFunction("SFA.DAS.ServiceBus.Tools.Functions")]
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
-    .ConfigureAppConfiguration((hostBuilderContext, builder) => { builder.BuildDasConfiguration(hostBuilderContext.Configuration); })
+    .ConfigureAppConfiguration(builder => builder.BuildDasConfiguration())
     .ConfigureNServiceBus()
     .ConfigureServices((context, services) =>
     {
@@ -28,8 +27,12 @@ var host = new HostBuilder()
 
         var configuration = context.Configuration;
 
+        // Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", configuration["AzureWebJobsStorage"]);
+        // Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", "TESTING");
+
         services.Replace(ServiceDescriptor.Singleton(typeof(IConfiguration), configuration));
         services.AddOptions();
+        services.AddSingleton(configuration);
 
         services.AddTransient<IMessageProcessor, MessageProcessor>();
 

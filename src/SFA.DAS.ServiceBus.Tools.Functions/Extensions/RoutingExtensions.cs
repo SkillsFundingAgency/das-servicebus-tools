@@ -1,8 +1,7 @@
 using NServiceBus;
-using SFA.DAS.NServiceBus.Tools.Functions.Messages;
+using SFA.DAS.ServiceBus.Tools.Functions.Messages;
 
-
-namespace SFA.DAS.NServiceBus.Tools.Functions.Extensions;
+namespace SFA.DAS.ServiceBus.Tools.Functions.Extensions;
 
 public static class RoutingExtensions
 {

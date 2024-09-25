@@ -1,7 +1,7 @@
 ﻿using System;
 using NServiceBus;
 
-namespace SFA.DAS.NServiceBus.Tools.Functions.Messages;
+namespace SFA.DAS.ServiceBus.Tools.Functions.Messages;
 
 public class DraftExpireFundsCommand : ICommand
 {

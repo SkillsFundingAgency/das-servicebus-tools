@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NServiceBus;
 
-namespace SFA.DAS.NServiceBus.Tools.Functions.Services;
+namespace SFA.DAS.ServiceBus.Tools.Functions.Services;
 
 public interface IMessageProcessor
 {

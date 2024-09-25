@@ -5,6 +5,7 @@
 		<OutputType>Exe</OutputType>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<LangVersion>default</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.1" />

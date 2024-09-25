@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "SFA.DAS.NServiceBus.Tools.Functions": {
+    "SFA.DAS.ServiceBus.Tools.Functions": {
       "commandName": "Project",
       "commandLineArgs": "--port 7286",
       "launchBrowser": false

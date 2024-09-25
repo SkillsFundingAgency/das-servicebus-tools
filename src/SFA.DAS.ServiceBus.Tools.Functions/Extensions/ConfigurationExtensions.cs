@@ -2,11 +2,11 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 
-namespace SFA.DAS.NServiceBus.Tools.Functions.Extensions;
+namespace SFA.DAS.ServiceBus.Tools.Functions.Extensions;
 
 public static class ConfigurationExtensions
 {
-    public static IConfiguration BuildDasConfiguration(this IConfigurationBuilder configBuilder, IConfiguration configuration)
+    public static IConfiguration BuildDasConfiguration(this IConfigurationBuilder configBuilder)
     {
         configBuilder
             .SetBasePath(Directory.GetCurrentDirectory())
