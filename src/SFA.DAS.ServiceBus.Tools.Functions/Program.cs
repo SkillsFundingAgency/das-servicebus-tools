@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -5,11 +6,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
-using NServiceBus;
 using SFA.DAS.ServiceBus.Tools.Functions.Extensions;
 using SFA.DAS.ServiceBus.Tools.Functions.Services;
 
-[assembly: NServiceBusTriggerFunction("SFA.DAS.ServiceBus.Tools.Functions")]
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
@@ -27,14 +26,15 @@ var host = new HostBuilder()
 
         var configuration = context.Configuration;
 
-        // Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", configuration["AzureWebJobsStorage"]);
-        // Environment.SetEnvironmentVariable("NSERVICEBUS_LICENSE", "TESTING");
-
+#if DEBUG
+        Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", configuration["Values:AzureWebJobsStorage"]);
+#endif
+        
         services.Replace(ServiceDescriptor.Singleton(typeof(IConfiguration), configuration));
         services.AddOptions();
         services.AddSingleton(configuration);
 
-        services.AddTransient<IMessageProcessor, MessageProcessor>();
+        services.AddTransient<IMessageProcessor, StubMessageProcessor>();
 
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();

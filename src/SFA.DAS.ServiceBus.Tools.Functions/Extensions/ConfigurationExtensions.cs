@@ -10,14 +10,11 @@ public static class ConfigurationExtensions
     {
         configBuilder
             .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables();
-
-#if DEBUG
-        configBuilder.AddJsonFile("local.settings.json", optional: true);
-#endif
         
         var config = configBuilder.Build();
-        
+
         configBuilder.AddAzureTableStorage(options =>
         {
 #if DEBUG
