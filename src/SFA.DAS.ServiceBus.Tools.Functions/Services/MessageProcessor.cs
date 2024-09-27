@@ -11,20 +11,20 @@ namespace SFA.DAS.ServiceBus.Tools.Functions.Services;
 
 public interface IMessageProcessor
 {
-    Task SendCommand<T>(FunctionContext context) where T : class, ICommand;
-    Task SendCommand<T>(Stream requestContent, FunctionContext context) where T : class, ICommand;
+    Task SendCommand<T>(FunctionContext context) where T : class;
+    Task SendCommand<T>(Stream requestContent, FunctionContext context) where T : class;
 }
 
 public class StubMessageProcessor(ILogger<StubMessageProcessor> logger) : IMessageProcessor
 {
-    public Task SendCommand<T>(FunctionContext context) where T : class, ICommand
+    public Task SendCommand<T>(FunctionContext context) where T : class
     {
         var typeName = typeof(T).ToString().Split('.').Last();
         logger.LogInformation("Sending Message '{TypeName)}'", typeName);
         return Task.CompletedTask;
     }
 
-    public async Task SendCommand<T>(Stream requestContent, FunctionContext context) where T : class, ICommand
+    public async Task SendCommand<T>(Stream requestContent, FunctionContext context) where T : class
     {
         using var reader = new StreamReader(requestContent);
         var typeName = typeof(T).ToString().Split('.').Last();
@@ -35,7 +35,7 @@ public class StubMessageProcessor(ILogger<StubMessageProcessor> logger) : IMessa
 
 public class MessageProcessor(IFunctionEndpoint endpoint, ILogger<MessageProcessor> logger) : IMessageProcessor
 {
-    public async Task SendCommand<T>(Stream requestContent, FunctionContext context) where T : class, ICommand
+    public async Task SendCommand<T>(Stream requestContent, FunctionContext context) where T : class
     {
         using var reader = new StreamReader(requestContent);
         var content = await reader.ReadToEndAsync();
@@ -47,7 +47,7 @@ public class MessageProcessor(IFunctionEndpoint endpoint, ILogger<MessageProcess
         await SendCommand(command, typeName, context);
     }
 
-    public async Task SendCommand<T>(FunctionContext context) where T : class, ICommand
+    public async Task SendCommand<T>(FunctionContext context) where T : class
     {
         var typeName = typeof(T).ToString().Split('.').Last();
 
@@ -58,7 +58,7 @@ public class MessageProcessor(IFunctionEndpoint endpoint, ILogger<MessageProcess
         await SendCommand(command, typeName, context);
     }
     
-    private async Task SendCommand<T>(T command, string typeName, FunctionContext context) where T : class, ICommand
+    private async Task SendCommand<T>(T command, string typeName, FunctionContext context) where T : class
     {
         try
         {

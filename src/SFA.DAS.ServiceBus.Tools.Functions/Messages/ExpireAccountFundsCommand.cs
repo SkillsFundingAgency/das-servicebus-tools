@@ -1,8 +1,6 @@
-﻿using NServiceBus;
+﻿namespace SFA.DAS.ServiceBus.Tools.Functions.Messages;
 
-namespace SFA.DAS.ServiceBus.Tools.Functions.Messages;
-
-public class ExpireAccountFundsCommand : ICommand
+public class ExpireAccountFundsCommand 
 {
     public long AccountId { get; set; }
 }
