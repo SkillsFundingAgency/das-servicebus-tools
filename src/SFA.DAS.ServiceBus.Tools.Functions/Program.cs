@@ -31,7 +31,7 @@ var host = new HostBuilder()
         services.AddOptions();
         services.AddSingleton(configuration);
 
-        services.AddTransient<IMessageProcessor, StubMessageProcessor>();
+        services.AddTransient<IMessageProcessor, MessageProcessor>();
 
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
