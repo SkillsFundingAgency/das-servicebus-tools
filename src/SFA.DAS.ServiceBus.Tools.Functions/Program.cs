@@ -12,6 +12,7 @@ using SFA.DAS.ServiceBus.Tools.Functions.Services;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
+    .ConfigureFunctionsWorkerDefaults()
     .ConfigureAppConfiguration(builder => builder.BuildDasConfiguration())
     .ConfigureNServiceBus()
     .ConfigureServices((context, services) =>
