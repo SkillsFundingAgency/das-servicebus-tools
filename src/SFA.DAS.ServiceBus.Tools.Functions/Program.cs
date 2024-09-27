@@ -26,9 +26,6 @@ var host = new HostBuilder()
 
         var configuration = context.Configuration;
 
-#if DEBUG
-        Environment.SetEnvironmentVariable("AzureWebJobsServiceBus", configuration["Values:AzureWebJobsStorage"]);
-#endif
         
         services.Replace(ServiceDescriptor.Singleton(typeof(IConfiguration), configuration));
         services.AddOptions();
