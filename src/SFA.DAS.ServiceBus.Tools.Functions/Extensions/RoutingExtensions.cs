@@ -1,5 +1,5 @@
 using NServiceBus;
-using SFA.DAS.ServiceBus.Tools.Functions.Commands;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 
 namespace SFA.DAS.ServiceBus.Tools.Functions.Extensions;
 

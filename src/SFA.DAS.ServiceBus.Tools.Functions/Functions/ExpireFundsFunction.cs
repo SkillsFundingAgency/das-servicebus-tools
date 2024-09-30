@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.ServiceBus.Tools.Functions.Commands;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.ServiceBus.Tools.Functions.Services;
 
 namespace SFA.DAS.ServiceBus.Tools.Functions.Functions;

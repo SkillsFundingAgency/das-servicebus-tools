@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ServiceBus.Tools.Functions.Commands;
+﻿namespace SFA.DAS.EmployerFinance.Messages.Commands;
 
 public class ProcessPeriodEndPaymentsCommand
 {

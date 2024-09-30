@@ -35,7 +35,7 @@ public static class NServiceBusExtensions
         return hostBuilder;
     }
     
-    private static bool IsCommand(Type t) => t is ICommand || IsDasMessage(t, "Commands");
+    private static bool IsCommand(Type t) => t is ICommand || IsDasMessage(t, "Messages.Commands");
 
     private static bool IsDasMessage(Type t, string namespaceSuffix)
         => t.Namespace != null &&
