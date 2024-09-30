@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using SFA.DAS.ServiceBus.Tools.Functions.Extensions;
 using SFA.DAS.ServiceBus.Tools.Functions.Services;
-
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()

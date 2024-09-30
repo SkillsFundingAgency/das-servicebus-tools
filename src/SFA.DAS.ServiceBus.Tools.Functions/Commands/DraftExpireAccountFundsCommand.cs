@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.ServiceBus.Tools.Functions.Messages;
+namespace SFA.DAS.ServiceBus.Tools.Functions.Commands;
 
 public class DraftExpireAccountFundsCommand 
 {

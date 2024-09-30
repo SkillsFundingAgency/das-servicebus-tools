@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.ServiceBus.Tools.Functions.Messages;
+﻿namespace SFA.DAS.ServiceBus.Tools.Functions.Commands;
 
 public class ImportAccountLevyDeclarationsCommand(long accountId, string payeRef)
 {

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using Microsoft.Extensions.Hosting;
@@ -17,6 +18,8 @@ public static class NServiceBusExtensions
             endpointConfiguration.Routing.AddRouting();
             endpointConfiguration.AdvancedConfiguration.EnableInstallers();
             endpointConfiguration.AdvancedConfiguration.SendFailedMessagesTo(ErrorEndpointName);
+            endpointConfiguration.AdvancedConfiguration.Conventions()
+                .DefiningCommandsAs(IsCommand);
 
             if (!string.IsNullOrEmpty(config["NServiceBusLicense"]))
             {
@@ -32,4 +35,11 @@ public static class NServiceBusExtensions
 
         return hostBuilder;
     }
+    
+    private static bool IsCommand(Type t) => t is ICommand || IsDasMessage(t, "Commands");
+
+    private static bool IsDasMessage(Type t, string namespaceSuffix)
+        => t.Namespace != null &&
+           t.Namespace.StartsWith("SFA.DAS") &&
+           t.Namespace.EndsWith(namespaceSuffix);
 }

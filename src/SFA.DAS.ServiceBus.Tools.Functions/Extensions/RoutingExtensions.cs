@@ -1,5 +1,5 @@
 using NServiceBus;
-using SFA.DAS.ServiceBus.Tools.Functions.Messages;
+using SFA.DAS.ServiceBus.Tools.Functions.Commands;
 
 namespace SFA.DAS.ServiceBus.Tools.Functions.Extensions;
 
