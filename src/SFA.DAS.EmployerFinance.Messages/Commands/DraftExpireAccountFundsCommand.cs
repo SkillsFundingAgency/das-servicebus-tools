@@ -2,7 +2,8 @@
 
 namespace SFA.DAS.EmployerFinance.Messages.Commands;
 
-public class DraftExpireFundsCommand: Command
+public class DraftExpireAccountFundsCommand : Message
 {
+    public long AccountId { get; set; }
     public DateTime? DateTo { get; set; }
 }

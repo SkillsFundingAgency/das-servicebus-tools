@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerFinance.Messages.Commands;
 
-public class ExpireAccountFundsCommand : Command
+public class ExpireAccountFundsCommand : Message
 {
     public long AccountId { get; set; }
 }

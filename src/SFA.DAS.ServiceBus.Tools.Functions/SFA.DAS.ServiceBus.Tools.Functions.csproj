@@ -38,4 +38,7 @@
     <ItemGroup>
         <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext"/>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj" />
+    </ItemGroup>
 </Project>
