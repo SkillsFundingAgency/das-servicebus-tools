@@ -1,3 +1,3 @@
 ﻿namespace SFA.DAS.EmployerFinance.Messages.Commands;
 
-public class ImportPaymentsCommand;
+public class ImportPaymentsCommand : Command;
