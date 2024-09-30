@@ -21,6 +21,7 @@ var host = new HostBuilder()
             builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
 
             builder.AddConsole();
+            builder.AddApplicationInsights();
         });
 
         var configuration = context.Configuration;
