@@ -3,7 +3,7 @@
   <PropertyGroup>
     <LangVersion>default</LangVersion>
     <TargetFramework>net8.0</TargetFramework>
-    <IsPackable>true</IsPackable>
+    <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         
     <Authors>DAS</Authors>
