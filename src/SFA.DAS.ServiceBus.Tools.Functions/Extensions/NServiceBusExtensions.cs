@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-using System.Net;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
 

@@ -1,4 +1,3 @@
-using System.IO;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 
