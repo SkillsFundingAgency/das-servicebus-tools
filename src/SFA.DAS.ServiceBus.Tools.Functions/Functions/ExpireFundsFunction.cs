@@ -9,11 +9,14 @@ using SFA.DAS.ServiceBus.Tools.Functions.Services;
 
 namespace SFA.DAS.ServiceBus.Tools.Functions.Functions;
 
-public class ExpireFundsFunction(IMessageProcessor messageProcessor, ILogger<ExpireFundsFunction> logger)
+public class ExpireFundsFunction(IMessageProcessor messageProcessor)
 {
     [Function("ExpireFunds")]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", "ExpireFunds")] HttpRequestData req, FunctionContext functionContext)
     {
+        var logger = functionContext.GetLogger(nameof(ExpireFundsFunction));
+        logger.LogInformation("ExpireFundsFunction processing started.");
+        
         try
         {
             await messageProcessor.SendCommand<ExpireFundsCommand>(functionContext);
