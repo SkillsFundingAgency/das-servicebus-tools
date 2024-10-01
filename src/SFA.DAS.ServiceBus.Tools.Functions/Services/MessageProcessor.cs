@@ -11,24 +11,6 @@ public interface IMessageProcessor
     Task SendCommand<T>(Stream requestContent, FunctionContext context);
 }
 
-public class StubMessageProcessor(ILogger<StubMessageProcessor> logger) : IMessageProcessor
-{
-    public Task SendCommand<T>(FunctionContext context)
-    {
-        var typeName = typeof(T).ToString().Split('.').Last();
-        logger.LogInformation("Sending Message '{TypeName)}'", typeName);
-        return Task.CompletedTask;
-    }
-
-    public async Task SendCommand<T>(Stream requestContent, FunctionContext context)
-    {
-        using var reader = new StreamReader(requestContent);
-        var typeName = typeof(T).ToString().Split('.').Last();
-        var content = await reader.ReadToEndAsync();
-        logger.LogInformation("Sending Message '{TypeName)}' with payload: {Payload}", typeName, content);
-    }
-}
-
 public class MessageProcessor(IFunctionEndpoint endpoint, ILogger<MessageProcessor> logger) : IMessageProcessor
 {
     public async Task SendCommand<T>(Stream requestContent, FunctionContext context) 
