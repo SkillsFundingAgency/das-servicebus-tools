@@ -16,6 +16,7 @@ public static class RoutingExtensions
             typeof(ExpireFundsCommand),
             typeof(ImportAccountLevyDeclarationsCommand),
             typeof(ImportPaymentsCommand),
+            typeof(ImportAccountPaymentsCommand),
             typeof(ProcessPeriodEndPaymentsCommand)
         ], routing);
     }
