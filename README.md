@@ -64,7 +64,7 @@ All of the HttpTrigger endpoint verbs are POST. The shape of the messges are as 
 }
 ```
 ---
-### ImportAccountLevyDeclarations
+### ImportAccountPayments
 
 ```javascript
 {
