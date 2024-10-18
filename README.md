@@ -12,6 +12,7 @@ The messages which can be published are:
 * ExpireFunds
 * ImportAccountLevyDeclarations
 * ImportPayments
+* ImportAccountPayments
 * ProcessPeriodEndPayments
 
 All of the HttpTrigger endpoint verbs are POST. The shape of the messges are as shown below:
