@@ -1,52 +1,83 @@
-﻿using Microsoft.ServiceBus;
-using Microsoft.ServiceBus.Messaging;
-using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using Azure.Messaging.ServiceBus;
+using static SFA.DAS.Azure.ServiceBus.Tools.DLQConsole.Extensions.ConsoleExtensions;
 
-namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole
+namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole;
+
+public class DeadLetterRescheduler
 {
-    public static class DeadLetterRescheduler
+    private readonly string _topicName;
+    private readonly string _subscriptionName;
+    private readonly ServiceBusClient _client;
+    private readonly ServiceBusProcessor _deadLetterProcessor;
+
+    public DeadLetterRescheduler(string connectionString, string topicName, string subscriptionName)
     {
-        public static async Task RequeueMessages(string connectionString, string topicName, string subscriptionName)
-        {
-            var dlqClient = CreateDeadLetterQueueClient(connectionString, topicName, subscriptionName);
-            var topicClient = TopicClient.CreateFromConnectionString(connectionString, topicName);
+        _topicName = topicName;
+        _subscriptionName = subscriptionName;
+        _client = new ServiceBusClient(connectionString);
 
-            var hasMessages = true;
-
-            while (hasMessages)
+        _deadLetterProcessor = _client.CreateProcessor(
+            topicName: topicName,
+            subscriptionName: subscriptionName,
+            new ServiceBusProcessorOptions
             {
-                var message = await dlqClient.ReceiveAsync(TimeSpan.FromSeconds(2));
-
-                if (message == null)
-                {
-                    Console.WriteLine("No more messages to process.");
-                    hasMessages = false;
-                    continue;
-                }
-
-                Console.WriteLine($"Moving message with ID: {message.MessageId}.");
-
-                await topicClient.SendAsync(new BrokeredMessage(message.GetBody<Stream>()));
-
-                await message.CompleteAsync();
-
-                Console.WriteLine($"Moving message with ID: {message.MessageId} Completed.");
+                SubQueue = SubQueue.DeadLetter,
+                MaxConcurrentCalls = 2
             }
+        );
+    }
 
-            Console.WriteLine("Closing Dead Letter Queue Client.");
-            await dlqClient.CloseAsync();
-        }
-
-
-        private static MessageReceiver CreateDeadLetterQueueClient(string connectionString, string topicName, string subscriptionName)
+    public async Task RequeueMessages()
+    {
+        try
         {
-            var builder = new ServiceBusConnectionStringBuilder(connectionString);
-            var factory = MessagingFactory.CreateFromConnectionString(builder.ToString());
-            var deadLetterQueuePath = SubscriptionClient.FormatDeadLetterPath(topicName, subscriptionName);
+            await using var sender = _client.CreateSender(_topicName);
 
-            return factory.CreateMessageReceiver(deadLetterQueuePath);
+            await PickUpAndFixDeadletters(sender);
         }
+        catch (Exception e)
+        {
+            WriteError(e.ToString());
+            throw;
+        }
+        finally
+        {
+            await _deadLetterProcessor.DisposeAsync();
+            await _client.DisposeAsync();
+        }
+    }
+
+    private async Task PickUpAndFixDeadletters(ServiceBusSender resubmitSender)
+    {
+        var messageCount = 0;
+
+        _deadLetterProcessor.ProcessMessageAsync += async args =>
+        {
+            var resubmitMessage = new ServiceBusMessage(args.Message);
+            await resubmitSender.SendMessageAsync(resubmitMessage);
+            await args.CompleteMessageAsync(args.Message);
+            messageCount++;
+        };
+
+        _deadLetterProcessor.ProcessErrorAsync += args =>
+        {
+            WriteError($"Exception: {args.Exception.Message} {args.EntityPath}");
+            WriteError(args.Exception.ToString());
+
+            return Task.CompletedTask;
+        };
+
+        await _deadLetterProcessor.StartProcessingAsync();
+
+        Console.WriteLine($"Beginning processing dead-letter messages from subscription '{_subscriptionName}'.");
+        Console.WriteLine("Wait for a minute and then press any key to end the processing");
+        Console.ReadKey();
+
+        Console.WriteLine($"Successfully processed {messageCount} dead-letter messages.");
+        Console.WriteLine("Stopping the receiver...");
+
+        await _deadLetterProcessor.StopProcessingAsync();
+
+        Console.WriteLine("Message processing has stopped.");
     }
 }

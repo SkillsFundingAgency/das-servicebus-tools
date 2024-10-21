@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2036
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Azure.ServiceBus.Tools.DLQConsole", "SFA.DAS.Azure.ServiceBus.Tools.DLQConsole\SFA.DAS.Azure.ServiceBus.Tools.DLQConsole.csproj", "{001E04A9-880D-45A1-A076-2A7F77183BA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Azure.ServiceBus.Tools.DLQConsole", "SFA.DAS.Azure.ServiceBus.Tools.DLQConsole\SFA.DAS.Azure.ServiceBus.Tools.DLQConsole.csproj", "{85EEC24C-4746-4A48-9F15-9B4DF22CE63A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.NServiceBus.Tools.MessagePublisher", "SFA.DAS.NServiceBus.Tools.MessagePublisher\SFA.DAS.NServiceBus.Tools.MessagePublisher.csproj", "{FA2857E9-ED9C-4D21-9AEE-945F7E58ABAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.ServiceBus.Tools.Functions", "SFA.DAS.ServiceBus.Tools.Functions\SFA.DAS.ServiceBus.Tools.Functions.csproj", "{6A1BF2C5-1D60-451E-8D8F-69ED5B70E36F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Messages", "SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj", "{CC61CD60-C041-42FA-A590-F256B1DA0318}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{001E04A9-880D-45A1-A076-2A7F77183BA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{001E04A9-880D-45A1-A076-2A7F77183BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{001E04A9-880D-45A1-A076-2A7F77183BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{001E04A9-880D-45A1-A076-2A7F77183BA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA2857E9-ED9C-4D21-9AEE-945F7E58ABAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA2857E9-ED9C-4D21-9AEE-945F7E58ABAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA2857E9-ED9C-4D21-9AEE-945F7E58ABAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA2857E9-ED9C-4D21-9AEE-945F7E58ABAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85EEC24C-4746-4A48-9F15-9B4DF22CE63A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85EEC24C-4746-4A48-9F15-9B4DF22CE63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85EEC24C-4746-4A48-9F15-9B4DF22CE63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85EEC24C-4746-4A48-9F15-9B4DF22CE63A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A1BF2C5-1D60-451E-8D8F-69ED5B70E36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A1BF2C5-1D60-451E-8D8F-69ED5B70E36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A1BF2C5-1D60-451E-8D8F-69ED5B70E36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A1BF2C5-1D60-451E-8D8F-69ED5B70E36F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC61CD60-C041-42FA-A590-F256B1DA0318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC61CD60-C041-42FA-A590-F256B1DA0318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC61CD60-C041-42FA-A590-F256B1DA0318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC61CD60-C041-42FA-A590-F256B1DA0318}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

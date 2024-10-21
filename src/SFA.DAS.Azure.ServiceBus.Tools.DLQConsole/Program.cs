@@ -1,25 +1,24 @@
-﻿using System;
+﻿using static SFA.DAS.Azure.ServiceBus.Tools.DLQConsole.Extensions.ConsoleExtensions;
 
-namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole
+namespace SFA.DAS.Azure.ServiceBus.Tools.DLQConsole;
+
+public class Program
 {
-    public class Program
+    public static async Task Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            Console.Write("Enter Azure Service Bus connection string: ");
-            var connectionString = Console.ReadLine();
+        Console.WriteLine("Apprenticeship Service - Dead-Letter Re-Enqueue Application.");
+        Console.WriteLine();
+        
+        var connectionString = GetInput("Enter Azure Service Bus connection string: ");
+        var topicName = GetInput("Enter Azure Topic name: ");
+        var subscriptionName = GetInput("Enter Azure Topic Subscription name: ");
 
-            Console.Write("Enter Azure Topic name: ");
-            var topicName = Console.ReadLine();
+        var scheduler = new DeadLetterRescheduler(
+            connectionString,
+            topicName,
+            subscriptionName
+        );
 
-            Console.Write("Enter Azure Topic Subscription name: ");
-            var subscriptionName = Console.ReadLine();
-
-            Console.WriteLine("Moving messages from dead letter queue to topic queue. Please wait...");
-
-            DeadLetterRescheduler.RequeueMessages(connectionString, topicName, subscriptionName).Wait();
-
-            Console.WriteLine("All dead letter messages have been requeued.");
-        }
+        await scheduler.RequeueMessages();
     }
 }
