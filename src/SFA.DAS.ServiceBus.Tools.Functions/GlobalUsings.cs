@@ -9,3 +9,4 @@ global using SFA.DAS.EmployerFinance.Messages.Events;
 global using SFA.DAS.CommitmentsV2.Messages.Commands;
 global using SFA.DAS.EmployerAccounts.Messages.Events;
 global using SFA.DAS.Learning.Types;
+global using SFA.DAS.LearnerData.Events;
