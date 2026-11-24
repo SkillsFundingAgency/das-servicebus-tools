@@ -21,7 +21,7 @@
     <PackageReference Include="NServiceBus.Newtonsoft.Json" Version="4.0.0" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="17.1.113" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.3195" />
-    <PackageReference Include="SFA.DAS.Learning.Types" Version="8.15.88-prerelease-55" />
+    <PackageReference Include="SFA.DAS.Learning.Types" Version="8.15.87-prerelease-43" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.9" />
   </ItemGroup>
 
