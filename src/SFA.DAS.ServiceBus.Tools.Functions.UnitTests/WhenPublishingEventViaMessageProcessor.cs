@@ -9,6 +9,7 @@ using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerFinance.Messages.Events;
+using SFA.DAS.Learning.Types;
 using SFA.DAS.ServiceBus.Tools.Functions.Services;
 
 namespace SFA.DAS.ServiceBus.Tools.Functions.UnitTests;
@@ -96,5 +97,51 @@ public class WhenPublishingEventViaMessageProcessor
 
         // Act // Assert
         Assert.ThrowsAsync<Exception>(() => sut.PublishEvent<RefreshEmployerLevyDataCompletedEvent>(stream, context));
+    }
+
+    [Test]
+    public async Task WhenPublishingApprovedLearningUpdatedEvent_Then_PriceScheduleIsPublished()
+    {
+        var endpoint = new Mock<IFunctionEndpoint>();
+        var logger = new Mock<ILogger<MessageProcessor>>();
+        var sut = new MessageProcessor(endpoint.Object, logger.Object);
+        var context = Mock.Of<FunctionContext>();
+        var payload = """
+                      {
+                        "apprenticeshipId": 126625,
+                        "learningKey": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "learningType": "apprenticeship",
+                        "changes": [],
+                        "prices": [
+                          {
+                            "trainingPrice": 14000,
+                            "assessmentPrice": 1000,
+                            "effectiveFrom": "2026-10-02"
+                          },
+                          {
+                            "trainingPrice": 15000,
+                            "assessmentPrice": 1000,
+                            "effectiveFrom": "2027-04-01"
+                          }
+                        ]
+                      }
+                      """;
+        await using var stream = new MemoryStream(Encoding.UTF8.GetBytes(payload));
+
+        await sut.PublishEvent<ApprovedLearningUpdatedEvent>(stream, context);
+
+        endpoint.Verify(
+            x => x.Publish(
+                It.Is<ApprovedLearningUpdatedEvent>(e =>
+                    e.ApprenticeshipId == 126625 &&
+                    e.Prices.Count == 2 &&
+                    e.Prices[0].TrainingPrice == 14000 &&
+                    e.Prices[0].AssessmentPrice == 1000 &&
+                    e.Prices[0].EffectiveFrom == new DateTime(2026, 10, 2) &&
+                    e.Prices[1].TrainingPrice == 15000 &&
+                    e.Prices[1].AssessmentPrice == 1000 &&
+                    e.Prices[1].EffectiveFrom == new DateTime(2027, 4, 1)),
+                context),
+            Times.Once);
     }
 }

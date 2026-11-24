@@ -264,7 +264,7 @@ The apprenticeship id must exist in that environment.
 {
    "apprenticeshipId": 264643,
   "learningType": "apprenticeship",
-  "learningKey": a1b2c3d4-e5f6-7890-abcd-ef1234567890,
+  "learningKey": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   "learningUri": "uri",
   "changes": [
     {
@@ -280,6 +280,18 @@ The apprenticeship id must exist in that environment.
         "old": "TestSurname",
         "new": "TestSurname1"
       }
+    }
+  ],
+  "prices": [
+    {
+      "trainingPrice": 14000,
+      "assessmentPrice": 1000,
+      "effectiveFrom": "2026-10-02"
+    },
+    {
+      "trainingPrice": 15000,
+      "assessmentPrice": 1000,
+      "effectiveFrom": "2027-04-01"
     }
   ]
 }
