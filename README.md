@@ -21,6 +21,7 @@ The messages which can be published are:
 * LearningPaused
 * LearningResumed
 * ApprovedLearningUpdated
+* LearnerData
 
 The Functions app targets **.NET 10** (`net10.0`). All HttpTrigger endpoint verbs are POST. The shape of the messges are as shown below:
 
@@ -218,6 +219,41 @@ The apprenticeship id must exist in that environment. `ResumeDate` is after the 
 }
 ```
 ---
+### LearnerData
+
+Publishes `SFA.DAS.LearnerData.Events.LearnerDataEvent` to the shared service bus. Consumed by `SFA.DAS.LearnerData.Functions.ProcessLearners`, which stores the learner data and forwards `OnServicePayments` to the learner data API.
+
+Use this endpoint to test APPMAN-3303 before Earn and Pay populates the new field. The learner must be valid for the target environment.
+
+```javascript
+{
+    "ULN": 1234567890,
+    "UKPRN": 10000001,
+    "FirstName": "Test",
+    "LastName": "Learner",
+    "Email": "test@example.com",
+    "DoB": "2000-01-01T00:00:00",
+    "StartDate": "2026-08-01T00:00:00",
+    "PlannedEndDate": "2028-07-31T00:00:00",
+    "PercentageLearningToBeDelivered": 100,
+    "EpaoPrice": 1000,
+    "TrainingPrice": 20000,
+    "AgreementId": "agreement-id",
+    "IsFlexiJob": false,
+    "PlannedOTJTrainingHours": 278,
+    "StandardCode": 1,
+    "LarsCode": "1",
+    "ConsumerReference": "test-reference",
+    "OnServicePayments": true,
+    "CorrelationId": "00000000-0000-0000-0000-000000000001",
+    "ReceivedDate": "2026-11-16T10:00:00Z",
+    "AcademicYear": 2627
+}
+```
+
+Set `OnServicePayments` to `true` to identify the learner as funded through the new earnings calculation engine. Set it to `false`, `null`, or omit it to test the existing calculation path.
+
+---
 ### ApprovedLearningUpdated
 
 Publishes `SFA.DAS.Learning.Types.ApprovedLearningUpdatedEvent` to the shared service bus. Consumed by `SFA.DAS.CommitmentsV2.ExternalHandlers`, which updates the apprenticeship in the CommitmentsV2 DB.
@@ -228,7 +264,7 @@ The apprenticeship id must exist in that environment.
 {
    "apprenticeshipId": 264643,
   "learningType": "apprenticeship",
-  "learningKey": a1b2c3d4-e5f6-7890-abcd-ef1234567890,
+  "learningKey": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
   "learningUri": "uri",
   "changes": [
     {
@@ -244,6 +280,18 @@ The apprenticeship id must exist in that environment.
         "old": "TestSurname",
         "new": "TestSurname1"
       }
+    }
+  ],
+  "prices": [
+    {
+      "trainingPrice": 14000,
+      "assessmentPrice": 1000,
+      "effectiveFrom": "2026-10-02"
+    },
+    {
+      "trainingPrice": 15000,
+      "assessmentPrice": 1000,
+      "effectiveFrom": "2027-04-01"
     }
   ]
 }
