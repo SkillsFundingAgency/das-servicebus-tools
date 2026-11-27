@@ -10,6 +10,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.Learning.Types;
+using SFA.DAS.Payments.External.Messages.Events.HiringGrant;
 using SFA.DAS.ServiceBus.Tools.Functions.Services;
 
 namespace SFA.DAS.ServiceBus.Tools.Functions.UnitTests;
@@ -141,6 +142,41 @@ public class WhenPublishingEventViaMessageProcessor
                     e.Prices[1].TrainingPrice == 15000 &&
                     e.Prices[1].AssessmentPrice == 1000 &&
                     e.Prices[1].EffectiveFrom == new DateTime(2027, 4, 1)),
+                context),
+            Times.Once);
+    }
+
+    [Test]
+    public async Task WhenPublishingRequestingPreEmploymentVerification_Then_EventFieldsArePublished()
+    {
+        var endpoint = new Mock<IFunctionEndpoint>();
+        var sut = new MessageProcessor(endpoint.Object, Mock.Of<ILogger<MessageProcessor>>());
+        var context = Mock.Of<FunctionContext>();
+        var eventId = Guid.Parse("01a1e929-92c9-7a3f-8b21-4c6d9e0f1a01");
+        var requestTime = new DateTime(2026, 11, 17, 10, 15, 0, DateTimeKind.Utc);
+        var payload = """
+                      {
+                        "EventId": "01a1e929-92c9-7a3f-8b21-4c6d9e0f1a01",
+                        "UKPRN": 10012345,
+                        "ULN": 3234567890,
+                        "EmployerAccountIdentifier": 322131,
+                        "ApprenticeshipId": 2321,
+                        "RequestTime": "2026-11-17T10:15:00Z"
+                      }
+                      """;
+        await using var stream = new MemoryStream(Encoding.UTF8.GetBytes(payload));
+
+        await sut.PublishEvent<RequestingPreEmploymentVerification>(stream, context);
+
+        endpoint.Verify(
+            x => x.Publish(
+                It.Is<RequestingPreEmploymentVerification>(e =>
+                    e.EventId == eventId &&
+                    e.UKPRN == 10012345 &&
+                    e.ULN == 3234567890 &&
+                    e.EmployerAccountIdentifier == 322131 &&
+                    e.ApprenticeshipId == 2321 &&
+                    e.RequestTime == requestTime),
                 context),
             Times.Once);
     }

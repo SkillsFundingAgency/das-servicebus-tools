@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
+using SFA.DAS.Payments.External.Messages.Events.HiringGrant;
 
 namespace SFA.DAS.ServiceBus.Tools.Functions.Extensions;
 
@@ -17,7 +18,7 @@ public static class NServiceBusExtensions
             endpointConfiguration.AdvancedConfiguration.SendFailedMessagesTo(ErrorEndpointName);
             endpointConfiguration.AdvancedConfiguration.Conventions()
                 .DefiningCommandsAs(IsCommand)
-                .DefiningEventsAs(t => t.Name.EndsWith("Event"));
+                .DefiningEventsAs(t => t == typeof(RequestingPreEmploymentVerification) || t.Name.EndsWith("Event"));
 
             if (!string.IsNullOrEmpty(config["NServiceBusLicense"]))
             {
