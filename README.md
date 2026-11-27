@@ -22,6 +22,7 @@ The messages which can be published are:
 * LearningResumed
 * ApprovedLearningUpdated
 * LearnerData
+* RequestingPreEmploymentVerification
 
 The Functions app targets **.NET 10** (`net10.0`). All HttpTrigger endpoint verbs are POST. The shape of the messges are as shown below:
 
@@ -218,6 +219,24 @@ The apprenticeship id must exist in that environment. `ResumeDate` is after the 
     "Created": "2026-08-10T10:00:00"
 }
 ```
+---
+### RequestingPreEmploymentVerification
+
+Publishes `SFA.DAS.Payments.External.Messages.Events.HiringGrant.RequestingPreEmploymentVerification` to the shared service bus. Use an approved apprenticeship in the test environment.
+
+```json
+{
+    "EventId": "01a1e929-92c9-7a3f-8b21-4c6d9e0f1a01",
+    "UKPRN": 10012345,
+    "ULN": 1234567890,
+    "EmployerAccountIdentifier": 322131,
+    "ApprenticeshipId": 2321,
+    "RequestTime": "2026-11-17T10:15:00Z"
+}
+```
+
+Omit `UKPRN`, `ULN`, or `EmployerAccountIdentifier` to use the corresponding value from the apprenticeship.
+
 ---
 ### LearnerData
 

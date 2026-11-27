@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
+using SFA.DAS.Payments.External.Messages.Events.HiringGrant;
 
 namespace SFA.DAS.ServiceBus.Tools.Functions.Extensions;
 
@@ -15,9 +16,7 @@ public static class NServiceBusExtensions
             endpointConfiguration.Routing.AddRouting();
             endpointConfiguration.AdvancedConfiguration.AssemblyScanner().ScanFileSystemAssemblies = false;
             endpointConfiguration.AdvancedConfiguration.SendFailedMessagesTo(ErrorEndpointName);
-            endpointConfiguration.AdvancedConfiguration.Conventions()
-                .DefiningCommandsAs(IsCommand)
-                .DefiningEventsAs(t => t.Name.EndsWith("Event"));
+            ConfigureMessageConventions(endpointConfiguration.AdvancedConfiguration.Conventions());
 
             if (!string.IsNullOrEmpty(config["NServiceBusLicense"]))
             {
@@ -33,7 +32,14 @@ public static class NServiceBusExtensions
 
         return hostBuilder;
     }
-    
+
+    internal static void ConfigureMessageConventions(ConventionsBuilder conventions)
+    {
+        conventions
+            .DefiningCommandsAs(IsCommand)
+            .DefiningEventsAs(t => t == typeof(RequestingPreEmploymentVerification) || t.Name.EndsWith("Event"));
+    }
+
     private static bool IsCommand(Type t) => t is ICommand || IsDasMessage(t, "Messages.Commands");
 
     private static bool IsDasMessage(Type t, string namespaceSuffix)
