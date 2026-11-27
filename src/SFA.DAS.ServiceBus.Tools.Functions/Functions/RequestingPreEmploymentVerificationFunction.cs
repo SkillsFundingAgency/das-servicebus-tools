@@ -7,7 +7,7 @@ public class RequestingPreEmploymentVerificationFunction(IMessageProcessor messa
 {
     [Function("RequestingPreEmploymentVerification")]
     public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "RequestingPreEmploymentVerification")] HttpRequestData req,
         FunctionContext functionContext)
     {
         try
