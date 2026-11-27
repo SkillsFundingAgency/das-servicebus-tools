@@ -43,6 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="SFA.DAS.ServiceBus.Tools.Functions.UnitTests" />
     <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
   </ItemGroup>
 

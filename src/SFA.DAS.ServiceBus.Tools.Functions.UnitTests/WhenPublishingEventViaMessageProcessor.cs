@@ -1,8 +1,10 @@
 using System;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NServiceBus;
@@ -11,6 +13,8 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.Learning.Types;
 using SFA.DAS.Payments.External.Messages.Events.HiringGrant;
+using SFA.DAS.ServiceBus.Tools.Functions.Extensions;
+using SFA.DAS.ServiceBus.Tools.Functions.Functions;
 using SFA.DAS.ServiceBus.Tools.Functions.Services;
 
 namespace SFA.DAS.ServiceBus.Tools.Functions.UnitTests;
@@ -147,10 +151,11 @@ public class WhenPublishingEventViaMessageProcessor
     }
 
     [Test]
-    public async Task WhenPublishingRequestingPreEmploymentVerification_Then_EventFieldsArePublished()
+    public async Task WhenPublishingRequestingPreEmploymentVerification_Then_EventFieldsArePublishedAndResponseIsOk()
     {
         var endpoint = new Mock<IFunctionEndpoint>();
-        var sut = new MessageProcessor(endpoint.Object, Mock.Of<ILogger<MessageProcessor>>());
+        var processor = new MessageProcessor(endpoint.Object, Mock.Of<ILogger<MessageProcessor>>());
+        var function = new RequestingPreEmploymentVerificationFunction(processor);
         var context = Mock.Of<FunctionContext>();
         var eventId = Guid.Parse("01a1e929-92c9-7a3f-8b21-4c6d9e0f1a01");
         var requestTime = new DateTime(2026, 11, 17, 10, 15, 0, DateTimeKind.Utc);
@@ -166,8 +171,9 @@ public class WhenPublishingEventViaMessageProcessor
                       """;
         await using var stream = new MemoryStream(Encoding.UTF8.GetBytes(payload));
 
-        await sut.PublishEvent<RequestingPreEmploymentVerification>(stream, context);
+        var result = await function.Run(CreateRequest(context, stream), context);
 
+        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         endpoint.Verify(
             x => x.Publish(
                 It.Is<RequestingPreEmploymentVerification>(e =>
@@ -179,5 +185,42 @@ public class WhenPublishingEventViaMessageProcessor
                     e.RequestTime == requestTime),
                 context),
             Times.Once);
+    }
+
+    [Test]
+    public async Task WhenPublishingRequestingPreEmploymentVerificationFails_Then_ResponseIsBadRequest()
+    {
+        var context = Mock.Of<FunctionContext>();
+        await using var stream = new MemoryStream();
+        var processor = new Mock<IMessageProcessor>();
+        processor.Setup(p => p.PublishEvent<RequestingPreEmploymentVerification>(stream, context))
+            .ThrowsAsync(new InvalidOperationException("publish failed"));
+        var function = new RequestingPreEmploymentVerificationFunction(processor.Object);
+
+        var result = await function.Run(CreateRequest(context, stream), context);
+
+        Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+        processor.Verify(p => p.PublishEvent<RequestingPreEmploymentVerification>(stream, context), Times.Once);
+    }
+
+    [TestCase(typeof(RequestingPreEmploymentVerification), true)]
+    [TestCase(typeof(ApprovedLearningUpdatedEvent), true)]
+    [TestCase(typeof(object), false)]
+    public void WhenConfiguringMessageConventions_Then_EventsAreRecognised(Type messageType, bool expected)
+    {
+        var conventions = new EndpointConfiguration("ServiceBusTools.Tests").Conventions();
+        NServiceBusExtensions.ConfigureMessageConventions(conventions);
+
+        Assert.That(conventions.Conventions.IsEventType(messageType), Is.EqualTo(expected));
+    }
+
+    private static HttpRequestData CreateRequest(FunctionContext context, Stream body)
+    {
+        var response = new Mock<HttpResponseData>(context);
+        response.SetupProperty(r => r.StatusCode);
+        var request = new Mock<HttpRequestData>(context);
+        request.SetupGet(r => r.Body).Returns(body);
+        request.Setup(r => r.CreateResponse()).Returns(response.Object);
+        return request.Object;
     }
 }
